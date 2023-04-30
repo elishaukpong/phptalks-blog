@@ -7,7 +7,6 @@ use App\Services\ModelServiceInterface;
 
 class BlogController extends Controller
 {
-
     public function __construct(protected ModelServiceInterface $blogService)
     {}
 

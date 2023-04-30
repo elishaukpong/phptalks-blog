@@ -32,6 +32,16 @@ class BlogService implements ModelServiceInterface
             $this->tagService->create($data)
         );
 
+//        $this->blogBuilderService
+//            ->setData($data)
+//            ->setBlog($blog)
+//            ->createTag()
+//            ->createCategory()
+//            ->createPhotos()
+//            ->createComments();
+
+//        Factory::make($type)->create($data);
+
         return $blog;
     }
 
