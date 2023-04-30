@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Blog;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-interface BlogServiceInterface
+interface ModelServiceInterface
 {
     public function getAll(): LengthAwarePaginator;
 
-    public function create(array $data): Blog;
+    public function create(array $data): Model|array;
 }

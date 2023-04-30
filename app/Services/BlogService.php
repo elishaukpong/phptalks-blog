@@ -2,14 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\Author;
 use App\Models\Blog;
-use App\Models\Tag;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
-class BlogService implements BlogServiceInterface
+class BlogService implements ModelServiceInterface
 {
+    public function __construct(
+        protected ModelServiceInterface $authorService,
+        protected ModelServiceInterface $tagService
+    )
+    {}
 
     public function getAll(): LengthAwarePaginator
     {
@@ -18,21 +21,16 @@ class BlogService implements BlogServiceInterface
 
     public function create(array $data): Blog
     {
-        $tags = [];
-
-        $author = Author::create($data);
-
         $blog = Blog::create(
-            array_merge($data,['author_id' => $author->id, 'slug' => $this->slugify($data['title'])])
+            array_merge($data, [
+                'author_id' => $this->authorService->create($data)->id,
+                'slug' => $this->slugify($data['title'])
+            ])
         );
 
-        foreach (explode(',', $data['tags']) as $tag) {
-            $tags[] = Tag::firstOrCreate([
-                'tag' => trim($tag)
-            ])->id;
-        }
-
-        $blog->tags()->attach($tags);
+        $blog->tags()->attach(
+            $this->tagService->create($data)
+        );
 
         return $blog;
     }

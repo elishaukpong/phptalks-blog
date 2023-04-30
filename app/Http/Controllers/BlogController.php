@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BlogRequest;
-use App\Services\BlogServiceInterface;
+use App\Services\ModelServiceInterface;
 
 class BlogController extends Controller
 {
 
-    public function __construct(protected BlogServiceInterface $blogService)
+    public function __construct(protected ModelServiceInterface $blogService)
     {}
 
     public function index()

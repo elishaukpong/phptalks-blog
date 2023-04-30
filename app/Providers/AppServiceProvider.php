@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\BlogController;
+use App\Services\AuthorService;
 use App\Services\BlogService;
 use App\Services\BlogServiceInterface;
+use App\Services\ModelServiceInterface;
+use App\Services\TagService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,11 +17,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(BlogServiceInterface::class, BlogService::class);
-
-//        $this->app->when(BlogService::class)
-//            ->needs(BaseInterface::class)
-//            ->give(AuthorService);
+        $this->app->when(BlogController::class)
+            ->needs(ModelServiceInterface::class)
+            ->give(function(){
+                return new BlogService(
+                    new AuthorService(),
+                    new TagService()
+                );
+            });
     }
 
     /**
